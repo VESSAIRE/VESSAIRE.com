@@ -629,16 +629,6 @@
                 </thead>
                 <tbody id="adminInventoryBody"></tbody>
             </table>
-
-            <h3 style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.2em; margin-top:45px; font-weight:300;">Customer Order Requests</h3>
-            <table>
-                <thead>
-                    <tr><th>Date</th><th>Customer / Address</th><th>Items</th><th>Method</th></tr>
-                </thead>
-                <tbody id="adminOrdersBody">
-                    <tr><td colspan="4" style="color:var(--text-muted);">No orders recorded yet.</td></tr>
-                </tbody>
-            </table>
         </div>
     </div>
 
@@ -698,8 +688,12 @@
                     <input type="text" id="custName" required placeholder="John Doe" class="lux-input">
                 </div>
                 <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="custEmail" required placeholder="you@example.com" autocomplete="email" class="lux-input">
+                </div>
+                <div class="form-group">
                     <label>Shipping Address (Street, City, Province)</label>
-                    <input type="text" id="custAddress" required placeholder="123 Luxury Lane, Calgary AB" class="lux-input">
+                    <input type="text" id="custAddress" required placeholder="123 Luxury Lane, Calgary AB" autocomplete="street-address" class="lux-input">
                 </div>
                 <div class="form-group">
                     <label>Payment Method</label>
@@ -724,6 +718,11 @@
 
     <script>
         const MASTER_PIN = "1234";
+
+        // Create a form at https://formspree.io and set its notification email
+        // to your inbox. Replace YOUR_FORM_ID with the ID Formspree provides.
+        // Your private destination email stays in Formspree, not in this public code.
+        const FORMSPREE_ENDPOINT = "https://formspree.io/f/xyeeazag";
 
         const defaultProducts = [
             { id: "1", title: "10mm Miami Cuban Link", category: "Chains", specs: "VVS1 Moissanite • 925 Sterling Silver", price: "$450", image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80" },
@@ -862,36 +861,84 @@
             document.getElementById('checkoutModal').style.display = 'none';
         }
 
-        function submitOrder(e) {
+        async function submitOrder(e) {
             e.preventDefault();
-            const name = document.getElementById('custName').value;
-            const address = document.getElementById('custAddress').value;
+
+            if (!cart.length) {
+                alert('Your bag is empty.');
+                return;
+            }
+
+            if (FORMSPREE_ENDPOINT.includes('YOUR_FORM_ID')) {
+                alert('Checkout email is not connected yet. Add your Formspree form ID to the website code first.');
+                return;
+            }
+
+            const form = e.currentTarget;
+            const submitButton = form.querySelector('button[type="submit"]');
+            const name = document.getElementById('custName').value.trim();
+            const customerEmail = document.getElementById('custEmail').value.trim();
+            const address = document.getElementById('custAddress').value.trim();
             const method = document.getElementById('payMethod').value;
+            const itemsSummary = cart.map(item => `${item.title} (${item.price})`).join(', ');
+            const total = cart.reduce((sum, item) => sum + (parseFloat(item.price.replace(/[^0-9.]/g, '')) || 0), 0);
 
-            const itemsSummary = cart.map(i => `${i.title} (${i.price})`).join(', ');
-            const orders = JSON.parse(localStorage.getItem('vessaire_orders') || '[]');
-            
-            orders.unshift({
-                id: Date.now().toString().slice(-6),
+            const orderDetails = {
+                _subject: `New VESSAIRE order request from ${name}`,
+                customer_name: name,
+                customer_email: customerEmail,
+                shipping_address: address,
+                payment_method: method,
                 items: itemsSummary,
-                name, address, method,
-                date: new Date().toLocaleDateString()
-            });
-            
-            localStorage.setItem('vessaire_orders', JSON.stringify(orders));
+                order_total: `$${total.toFixed(2)}`,
+                submitted_at: new Date().toLocaleString()
+            };
 
-            alert('Order request submitted successfully!');
-            cart = [];
-            updateCartUI();
-            closeCheckout();
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending Order...';
+
+            try {
+                const response = await fetch(FORMSPREE_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(orderDetails)
+                });
+
+                if (!response.ok) {
+                    throw new Error('The order form service did not accept the request.');
+                }
+
+                alert('Thank you! Your order request has been sent. VESSAIRE will contact you about the next steps.');
+                cart = [];
+                updateCartUI();
+                closeCheckout();
+                form.reset();
+            } catch (error) {
+                console.error('VESSAIRE order submission failed:', error);
+                alert('We could not send your order right now. Please try again or contact VESSAIRE directly.');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Submit Order Request';
+            }
         }
 
-        // Stealth Admin Shortcut: Ctrl + Shift + A
+        // Admin shortcuts: Ctrl/Cmd + Shift + A (original) OR Alt + Shift + V.
+        function openAdminLogin() {
+            document.getElementById('adminPinModal').style.display = 'flex';
+            document.getElementById('masterPinInput').focus();
+        }
+
         window.addEventListener('keydown', function(e) {
-            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'a') {
+            const key = e.key.toLowerCase();
+            const originalShortcut = (e.ctrlKey || e.metaKey) && e.shiftKey && key === 'a';
+            const alternateShortcut = e.altKey && e.shiftKey && key === 'v';
+
+            if (originalShortcut || alternateShortcut) {
                 e.preventDefault();
-                document.getElementById('adminPinModal').style.display = 'flex';
-                document.getElementById('masterPinInput').focus();
+                openAdminLogin();
             }
         });
 
@@ -918,7 +965,6 @@
             document.getElementById('adminHeroInput').value = settings.heroImage;
 
             const products = getProducts();
-            const orders = JSON.parse(localStorage.getItem('vessaire_orders') || '[]');
 
             const invBody = document.getElementById('adminInventoryBody');
             invBody.innerHTML = '';
@@ -932,21 +978,6 @@
                     </tr>
                 `;
             });
-
-            const ordBody = document.getElementById('adminOrdersBody');
-            if (orders.length > 0) {
-                ordBody.innerHTML = '';
-                orders.forEach(o => {
-                    ordBody.innerHTML += `
-                        <tr>
-                            <td>${o.date}</td>
-                            <td><strong>${o.name}</strong><br><span style="color:var(--text-muted); font-size:0.65rem;">${o.address}</span></td>
-                            <td>${o.items}</td>
-                            <td>${o.method}</td>
-                        </tr>
-                    `;
-                });
-            }
         }
 
         function saveSettings(e) {
