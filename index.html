@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VESSAIRE | High-End Moissanite & 925 Sterling Silver</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Manrope:wght@300;400;500;600&display=swap');
         :root {
             --bg-color: #030303;
             --card-bg: #080808;
@@ -532,6 +534,36 @@
             font-weight: 300;
         }
 
+
+        .product-card { cursor:pointer; }
+        .product-card .buy-btn { position:relative; z-index:2; }
+        .detail-modal { display:none; position:fixed; inset:0; z-index:2100; background:rgba(0,0,0,.94); overflow-y:auto; padding:28px; }
+        .detail-shell { max-width:1180px; margin:35px auto; background:#070707; border:1px solid var(--border-color); padding:34px; }
+        .detail-top { display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:18px; margin-bottom:28px; }
+        .detail-layout { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr); gap:48px; }
+        .gallery-main { width:100%; height:520px; object-fit:cover; background:#050505; }
+        .gallery-thumbs { display:flex; gap:10px; overflow-x:auto; padding:12px 0; }
+        .gallery-thumb { width:82px; height:82px; object-fit:cover; cursor:pointer; border:1px solid #292929; flex:0 0 auto; }
+        .gallery-thumb.active { border-color:#fff; }
+        .detail-kicker,.review-meta { color:var(--text-muted); font-size:.65rem; letter-spacing:.16em; text-transform:uppercase; }
+        .detail-name { font-size:1.35rem; font-weight:300; letter-spacing:.13em; margin:12px 0; }
+        .detail-price { font-size:1.1rem; margin:18px 0; }
+        .detail-description { color:#aaa; font-size:.78rem; line-height:2; letter-spacing:.05em; white-space:pre-wrap; }
+        .detail-field { margin:24px 0; }
+        .detail-field label { display:block; color:var(--text-muted); font-size:.62rem; text-transform:uppercase; letter-spacing:.18em; margin-bottom:10px; }
+        .review-form { margin-top:28px; padding:24px; border:1px solid var(--border-color); background:#050505; }
+        .review-note { color:#888; font-size:.66rem; line-height:1.7; margin:12px 0 18px; letter-spacing:.04em; }
+        .reviews-section { border-top:1px solid var(--border-color); margin-top:45px; padding-top:30px; }
+        .reviews-heading { font-size:.85rem; letter-spacing:.2em; font-weight:300; margin-bottom:20px; }
+        .review-card { border-bottom:1px solid #1b1b1b; padding:18px 0; }
+        .review-stars { color:#e8d8ad; letter-spacing:.15em; margin:8px 0; }
+        .review-body { color:#aaa; font-size:.75rem; line-height:1.8; letter-spacing:.04em; }
+        .admin-product-fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px; margin:16px 0; }
+        .admin-help { color:#888; font-size:.65rem; line-height:1.7; margin:8px 0 18px; letter-spacing:.04em; }
+        .admin-action { background:#171717; border:1px solid #333; color:#eee; padding:7px 10px; cursor:pointer; font-size:.62rem; margin:2px; }
+        .size-options { display:flex; flex-wrap:wrap; gap:9px; }
+        @media(max-width:800px) { .detail-modal{padding:8px}.detail-shell{margin:8px auto;padding:18px}.detail-layout{grid-template-columns:1fr;gap:22px}.gallery-main{height:360px} }
+
         /* Responsive Breakpoints */
         @media (max-width: 1024px) {
             .container { padding: 0 30px 50px 30px; }
@@ -549,6 +581,287 @@
             .drawer { max-width: 100%; left: -100%; }
             .cart-drawer { right: -100%; }
         }
+        /* VESSAIRE refined visual direction: editorial serif + soft champagne highlights */
+
+        :root {
+            --bg-color: #080808;
+            --card-bg: #10100f;
+            --border-color: rgba(220, 211, 195, 0.13);
+            --border-hover: rgba(226, 215, 194, 0.34);
+            --text-main: #f3f0e9;
+            --text-muted: #aaa49a;
+            --accent: #e7dfd0;
+            --vessaire-champagne: #d8cbb4;
+            --vessaire-soft: #c5beb2;
+        }
+
+        * {
+            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+            letter-spacing: 0.035em;
+        }
+
+        body {
+            background:
+                radial-gradient(ellipse at 50% -18%, rgba(196, 177, 145, 0.105), transparent 43%),
+                linear-gradient(180deg, #0b0b0a 0%, #080808 42%, #050505 100%);
+            color: var(--text-main);
+        }
+
+        header {
+            background: linear-gradient(180deg, rgba(14, 14, 13, 0.97), rgba(8, 8, 8, 0.93));
+            border-bottom-color: rgba(220, 211, 195, 0.16);
+        }
+
+        .logo, .hero-content h1, .product-title, .drawer-title, .detail-name,
+        .reviews-heading, .footer-title, .modal-content h2, #adminDashboardPanel h2,
+        #adminDashboardPanel h3 {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-weight: 400;
+            letter-spacing: 0.11em;
+        }
+
+        .logo {
+            font-size: 1.55rem;
+            letter-spacing: 0.34em;
+            color: #eee8dc;
+        }
+
+        .nav-trigger, .bag-btn, .hero-content p, .product-specs, .product-price,
+        .buy-btn, .detail-kicker, .review-meta, .detail-description,
+        .detail-field label, .review-note, .review-body, .admin-help,
+        .footer-desc, .footer-bottom, .form-group label, .lux-input,
+        .lux-select, .action-btn, th, td, .collection-link, .contact-email-link {
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .nav-trigger, .bag-btn {
+            color: #c2bbae;
+            letter-spacing: 0.16em;
+        }
+
+        .hero-banner {
+            border-bottom-color: rgba(220, 211, 195, 0.18);
+            box-shadow: inset 0 -90px 100px -80px rgba(213, 196, 165, 0.12);
+        }
+
+        .hero-banner::after {
+            background: linear-gradient(180deg, rgba(5,5,5,0.12) 0%, rgba(8,8,8,0.18) 42%, rgba(8,8,8,0.96) 100%);
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2rem, 3vw, 2.8rem);
+            letter-spacing: 0.13em;
+            color: #f2ece1;
+            text-shadow: 0 2px 24px rgba(0,0,0,0.35);
+        }
+
+        .hero-content p {
+            color: #c0b8aa;
+            font-size: 0.68rem;
+            letter-spacing: 0.19em;
+        }
+
+        .product-card {
+            background: linear-gradient(155deg, rgba(31, 30, 27, 0.72) 0%, #10100f 36%, #0a0a0a 100%);
+            border-color: rgba(220, 211, 195, 0.13);
+            box-shadow: 0 16px 45px rgba(0,0,0,0.16);
+            transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s, box-shadow 0.4s;
+        }
+
+        .product-card:hover {
+            border-color: rgba(220, 211, 195, 0.34);
+            box-shadow: 0 20px 55px rgba(0,0,0,0.28), 0 0 30px rgba(202, 184, 153, 0.035);
+            transform: translateY(-3px);
+        }
+
+        .product-img-wrapper {
+            background: linear-gradient(145deg, #24221e, #0b0b0a 72%);
+        }
+
+        .product-info { padding: 30px; }
+
+        .product-title {
+            font-size: 1.35rem;
+            color: #eee8dc;
+            letter-spacing: 0.055em;
+            margin-bottom: 7px;
+        }
+
+        .product-specs {
+            color: #aaa49a;
+            font-size: 0.68rem;
+            line-height: 1.85;
+            letter-spacing: 0.025em;
+        }
+
+        .product-footer {
+            border-top-color: rgba(220, 211, 195, 0.15);
+        }
+
+        .product-price {
+            color: #e4dccd;
+            font-size: 0.9rem;
+            letter-spacing: 0.08em;
+        }
+
+        .buy-btn, .action-btn {
+            background: linear-gradient(135deg, #eee8dc 0%, #cfc4b1 100%);
+            color: #171512;
+            border: 1px solid rgba(255,255,255,0.28);
+            letter-spacing: 0.15em;
+            transition: filter 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        .buy-btn:hover, .action-btn:hover {
+            background: linear-gradient(135deg, #f7f2e8 0%, #ddd1bd 100%);
+            filter: brightness(1.04);
+            box-shadow: 0 5px 22px rgba(216, 203, 180, 0.12);
+            transform: translateY(-1px);
+        }
+
+        .drawer, .cart-drawer {
+            background: linear-gradient(160deg, #171613 0%, #090909 52%);
+            border-color: rgba(220, 211, 195, 0.17);
+        }
+
+        .drawer-title { font-size: 1.55rem; color: #eee8dc; }
+        .collection-link { color: #d1c9bb; border-bottom-color: rgba(220, 211, 195, 0.12); }
+        .collection-link:hover { color: #fff; }
+
+        .lux-input, .lux-select {
+            background: linear-gradient(135deg, #171613, #0b0b0a);
+            border-color: rgba(220, 211, 195, 0.18);
+            color: #f0ebe2;
+            font-size: 0.75rem;
+            letter-spacing: 0.025em;
+        }
+
+        .lux-input:focus, .lux-select:focus { border-color: rgba(220, 211, 195, 0.55); }
+        .modal-content, .detail-shell {
+            background: linear-gradient(145deg, #171613 0%, #0c0c0b 54%, #080808 100%);
+            border-color: rgba(220, 211, 195, 0.2);
+            box-shadow: 0 24px 90px rgba(0,0,0,0.48);
+        }
+
+        .detail-modal { background: rgba(3,3,3,0.88); backdrop-filter: blur(12px); }
+        .detail-name { font-size: 2rem; color: #f0eade; letter-spacing: 0.055em; }
+        .detail-kicker, .review-meta { color: #b6ad9e; font-size: 0.62rem; letter-spacing: 0.14em; }
+        .detail-price { color: #e4dccd; }
+        .detail-description, .review-body { color: #c0baaf; font-size: 0.76rem; line-height: 1.95; letter-spacing: 0.015em; }
+        .detail-field label, .form-group label { color: #b6ad9e; letter-spacing: 0.14em; }
+        .review-form { background: linear-gradient(145deg, rgba(35,33,28,0.55), rgba(8,8,8,0.8)); border-color: rgba(220, 211, 195, 0.17); }
+        .review-note, .admin-help { color: #aaa49a; font-size: 0.66rem; letter-spacing: 0.015em; }
+        .reviews-section, .review-card { border-color: rgba(220, 211, 195, 0.15); }
+        .reviews-heading { font-size: 1.45rem; color: #eee8dc; letter-spacing: 0.08em; }
+        .review-stars { color: #d8c6a2; }
+        .gallery-thumb { border-color: rgba(220, 211, 195, 0.2); }
+        .gallery-thumb.active { border-color: #e5d8c1; }
+
+        footer {
+            background: linear-gradient(180deg, #0a0a09 0%, #11100e 100%);
+            border-top-color: rgba(220, 211, 195, 0.17);
+        }
+        .footer-title { font-size: 1.5rem; color: #eee8dc; letter-spacing: 0.1em; }
+        .footer-desc { color: #aaa49a; font-size: 0.72rem; letter-spacing: 0.015em; }
+        .contact-email-link { color: #e3dacb; border-bottom-color: rgba(220, 211, 195, 0.3); }
+        .footer-bottom { border-top-color: rgba(220, 211, 195, 0.13); color: #999286; }
+
+        #adminDashboardPanel { border-top-color: rgba(220, 211, 195, 0.2); }
+        .admin-action { background: linear-gradient(135deg, #24221e, #111); border-color: rgba(220, 211, 195, 0.22); color: #e8e1d5; }
+        th { color: #b6ad9e; }
+        th, td { border-bottom-color: rgba(220, 211, 195, 0.13); }
+
+        @media (max-width: 768px) {
+            .logo { font-size: 1.15rem; letter-spacing: 0.25em; }
+            .hero-content h1 { font-size: 1.8rem; }
+            .product-title { font-size: 1.3rem; }
+            .detail-name { font-size: 1.7rem; }
+        }
+
+
+        /* Responsive, edge-to-edge storefront and product detail layout */
+        .container {
+            max-width: none;
+            width: 100%;
+            padding-left: clamp(18px, 4vw, 76px);
+            padding-right: clamp(18px, 4vw, 76px);
+        }
+
+        .product-grid {
+            width: 100%;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr));
+            gap: clamp(18px, 2.4vw, 38px);
+        }
+
+        .product-img-wrapper {
+            height: clamp(280px, 31vw, 500px);
+        }
+
+        /* Product detail takes over the available viewport instead of floating centrally */
+        .detail-modal {
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .detail-shell {
+            width: 100%;
+            max-width: none;
+            min-height: 100vh;
+            margin: 0;
+            padding: clamp(22px, 4vw, 72px);
+            border-left: 0;
+            border-right: 0;
+        }
+
+        .detail-layout {
+            grid-template-columns: minmax(0, 1.15fr) minmax(340px, 0.85fr);
+            gap: clamp(28px, 5vw, 88px);
+            align-items: start;
+        }
+
+        .gallery-main {
+            height: clamp(420px, 68vh, 820px);
+            object-fit: contain;
+        }
+
+        .detail-info { min-width: 0; }
+
+        @media (min-width: 1500px) {
+            .product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 1100px) {
+            .detail-layout {
+                grid-template-columns: minmax(0, 1fr) minmax(300px, 0.9fr);
+                gap: 28px;
+            }
+            .gallery-main { height: clamp(360px, 55vh, 620px); }
+        }
+
+        @media (max-width: 800px) {
+            .detail-modal { padding: 0; }
+            .detail-shell {
+                width: 100%;
+                min-height: 100vh;
+                margin: 0;
+                padding: 20px clamp(16px, 4vw, 28px) 36px;
+                border-left: 0;
+                border-right: 0;
+            }
+            .detail-layout { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+            .gallery-main { height: min(68vh, 560px); min-height: 300px; }
+            .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+            .product-img-wrapper { height: clamp(190px, 42vw, 340px); }
+            .product-info { padding: 18px; }
+        }
+
+        @media (max-width: 520px) {
+            .product-grid { grid-template-columns: minmax(0, 1fr); }
+            .product-img-wrapper { height: min(105vw, 420px); }
+            .detail-shell { padding: 16px 14px 30px; }
+            .gallery-main { height: 58vh; min-height: 270px; }
+        }
+
     </style>
 </head>
 <body>
@@ -616,16 +929,42 @@
                             <option value="Rings">Rings</option>
                         </select>
                         <input type="text" id="newSpecs" required placeholder="Specs / Materials" class="lux-input">
-                        <input type="text" id="newImage" required placeholder="Image URL" class="lux-input">
+                        <input type="text" id="newImage" required placeholder="Main image URL" class="lux-input">
                     </div>
-                    <button type="submit" class="action-btn" style="width:auto; padding:12px 25px;">Publish Listing</button>
+                    <div class="admin-product-fields">
+                        <textarea id="newDescription" class="lux-input" rows="4" placeholder="Full product description"></textarea>
+                        <textarea id="newGallery" class="lux-input" rows="4" placeholder="Additional photo URLs, one per line"></textarea>
+                        <textarea id="newSizes" class="lux-input" rows="4" placeholder="Available sizes, comma separated"></textarea>
+                    </div>
+                    <p class="admin-help">Edit title, price, category, materials, description, gallery photos and sizes after publishing. Use full image URLs.</p>
+                    <input type="hidden" id="editingProductId" value="">
+                    <button type="submit" id="publishProductButton" class="action-btn" style="width:auto; padding:12px 25px;">Publish Listing</button>
+                    <button type="button" id="cancelEditButton" onclick="resetProductEditor()" class="admin-action" style="display:none;">Cancel Edit</button>
                 </form>
+            </div>
+
+
+            <div style="background:#050505; border:1px solid var(--border-color); padding:24px; margin:25px 0;">
+                <h3 style="font-size:.7rem; text-transform:uppercase; letter-spacing:.2em; margin-bottom:12px;">Review verification</h3>
+                <p class="admin-help">Review requests arrive through Formspree for manual order verification. Only reviews with both <code>verified: true</code> and <code>approved: true</code> in a product's reviews list are shown publicly. This static GitHub Pages/localStorage version cannot securely verify purchases or sync admin edits to every visitor. A shared database and server-side verification are needed for that.</p>
+            </div>
+
+            <div style="background:#050505; border:1px solid var(--border-color); padding:24px; margin:18px 0 35px;">
+                <h3 style="font-size:.7rem; text-transform:uppercase; letter-spacing:.2em; margin-bottom:16px;">Publish a verified customer review</h3>
+                <p class="admin-help">Only use this after you have checked the customer's order against your actual order records.</p>
+                <div class="admin-product-fields">
+                    <select id="reviewAdminProduct" class="lux-select"></select>
+                    <input id="reviewAdminName" class="lux-input" placeholder="Customer display name">
+                    <select id="reviewAdminRating" class="lux-select"><option value="5">5 stars</option><option value="4">4 stars</option><option value="3">3 stars</option><option value="2">2 stars</option><option value="1">1 star</option></select>
+                    <textarea id="reviewAdminText" class="lux-input" rows="3" placeholder="Review text"></textarea>
+                </div>
+                <button type="button" onclick="publishVerifiedReview()" class="action-btn" style="width:auto;padding:12px 25px;">Publish Verified Review</button>
             </div>
 
             <h3 style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.2em; font-weight:300;">Active Inventory</h3>
             <table>
                 <thead>
-                    <tr><th>Title</th><th>Category</th><th>Price</th><th>Action</th></tr>
+                    <tr><th>Title</th><th>Category</th><th>Price</th><th>Actions</th></tr>
                 </thead>
                 <tbody id="adminInventoryBody"></tbody>
             </table>
@@ -707,6 +1046,39 @@
         </div>
     </div>
 
+
+    <div id="productDetailModal" class="detail-modal" role="dialog" aria-modal="true" aria-label="Product details">
+      <div class="detail-shell">
+        <div class="detail-top"><span class="drawer-title">VESSAIRE / PRODUCT DETAILS</span><button onclick="closeProductDetail()" class="close-drawer-btn" aria-label="Close">&times;</button></div>
+        <div class="detail-layout">
+          <div><img id="detailMainImage" class="gallery-main" alt="Product photo"><div id="detailThumbnails" class="gallery-thumbs"></div></div>
+          <div>
+            <div id="detailCategory" class="detail-kicker"></div><h2 id="detailTitle" class="detail-name"></h2>
+            <div id="detailSpecs" class="detail-kicker"></div><div id="detailPrice" class="detail-price"></div>
+            <p id="detailDescription" class="detail-description"></p>
+            <div class="detail-field"><label for="detailSizeSelect">Select size</label><select id="detailSizeSelect" class="lux-select"></select></div>
+            <button id="detailAddButton" class="action-btn">Add to Bag</button>
+          </div>
+        </div>
+        <section class="reviews-section">
+          <h3 class="reviews-heading">CUSTOMER REVIEWS</h3><div id="productReviews"></div>
+          <div class="review-form">
+            <h4 class="reviews-heading">PURCHASE-VERIFIED REVIEW REQUEST</h4>
+            <p class="review-note">Reviews are not published automatically. Submit the email used for your order and your order reference. VESSAIRE must verify the purchase before approving a review. This static storefront cannot independently verify orders or securely publish reviews; submissions are sent for manual review.</p>
+            <form onsubmit="submitReviewRequest(event)">
+              <input type="hidden" id="reviewProductId">
+              <div class="form-group"><label>Your name</label><input id="reviewName" class="lux-input" required maxlength="60"></div>
+              <div class="form-group"><label>Order reference</label><input id="reviewOrder" class="lux-input" required maxlength="80"></div>
+              <div class="form-group"><label>Order email</label><input id="reviewEmail" type="email" class="lux-input" required></div>
+              <div class="form-group"><label>Rating</label><select id="reviewRating" class="lux-select"><option value="5">5 stars</option><option value="4">4 stars</option><option value="3">3 stars</option><option value="2">2 stars</option><option value="1">1 star</option></select></div>
+              <div class="form-group"><label>Your review</label><textarea id="reviewText" class="lux-input" rows="4" required maxlength="1200"></textarea></div>
+              <button type="submit" class="action-btn">Send Review for Verification</button>
+            </form>
+          </div>
+        </section>
+      </div>
+    </div>
+
     <!-- Admin PIN Modal -->
     <div id="adminPinModal" class="modal">
         <div class="modal-content" style="max-width:340px; text-align:center;">
@@ -725,9 +1097,9 @@
         const FORMSPREE_ENDPOINT = "https://formspree.io/f/xyeeazag";
 
         const defaultProducts = [
-            { id: "1", title: "10mm Miami Cuban Link", category: "Chains", specs: "VVS1 Moissanite • 925 Sterling Silver", price: "$450", image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80" },
-            { id: "2", title: "4mm Tennis Chain", category: "Chains", specs: "Passes Diamond Tester • Solid 925 Silver", price: "$320", image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=600&q=80" },
-            { id: "3", title: "12mm Prong Cuban Bracelet", category: "Bracelets", specs: "Hand-Set Moissanite • Heavyweight Silver", price: "$280", image: "https://images.unsplash.com/photo-1611591470771-75e96fc97f49?auto=format&fit=crop&w=600&q=80" }
+            { id: "1", title: "10mm Miami Cuban Link", category: "Chains", specs: "VVS1 Moissanite • 925 Sterling Silver", price: "$450", image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80", gallery: [], description: "A bold statement piece. Add confirmed metal, stone, dimensions and care details before publishing.", sizes: ["18 in", "20 in", "22 in", "24 in"], reviews: [] },
+            { id: "2", title: "4mm Tennis Chain", category: "Chains", specs: "Moissanite • 925 Sterling Silver", price: "$320", image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=600&q=80", gallery: [], description: "A refined tennis-chain silhouette. Update with verified specifications for the exact piece.", sizes: ["16 in", "18 in", "20 in", "22 in"], reviews: [] },
+            { id: "3", title: "12mm Prong Cuban Bracelet", category: "Bracelets", specs: "Moissanite • 925 Sterling Silver", price: "$280", image: "https://images.unsplash.com/photo-1611591470771-75e96fc97f49?auto=format&fit=crop&w=600&q=80", gallery: [], description: "A substantial bracelet designed to stand out. Add confirmed dimensions, weight and material details before launch.", sizes: ["7 in", "7.5 in", "8 in", "8.5 in"], reviews: [] }
         ];
 
         const defaultSettings = {
@@ -756,37 +1128,119 @@
             return JSON.parse(saved);
         }
 
+        function safeText(value) {
+            return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+        }
+
         function renderStore() {
             const settings = getSettings();
-            
             document.getElementById('heroBanner').style.backgroundImage = `url('${settings.heroImage}')`;
             const emailLink = document.getElementById('footerEmailLink');
             emailLink.innerText = settings.email;
             emailLink.href = `mailto:${settings.email}`;
-
             const grid = document.getElementById('productGrid');
             const products = getProducts();
-            
             const filtered = currentCategory === 'All' ? products : products.filter(p => p.category === currentCategory);
-
             grid.innerHTML = '';
             filtered.forEach(p => {
-                grid.innerHTML += `
-                    <div class="product-card">
-                        <div class="product-img-wrapper">
-                            <img src="${p.image}" class="product-img" alt="${p.title}" onerror="this.src='https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=600&q=80'">
-                        </div>
-                        <div class="product-info">
-                            <div class="product-title">${p.title}</div>
-                            <div class="product-specs">${p.specs}</div>
-                            <div class="product-footer">
-                                <span class="product-price">${p.price}</span>
-                                <button class="buy-btn" onclick="addToCart('${p.id}')">Add to Bag</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="product-img-wrapper"><img src="${safeText(p.image)}" class="product-img" alt="${safeText(p.title)}" onerror="this.src='https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=600&q=80'"></div>
+                    <div class="product-info"><div class="product-title">${safeText(p.title)}</div>
+                    <div class="product-specs">${safeText(p.specs || '')}</div>
+                    <div class="product-footer"><span class="product-price">${safeText(p.price)}</span><button class="buy-btn" type="button" onclick="event.stopPropagation(); addToCart('${safeText(p.id)}')">Add to Bag</button></div></div>`;
+                card.addEventListener('click', () => openProductDetail(p.id));
+                grid.appendChild(card);
             });
+        }
+
+        let activeDetailProductId = null;
+        let activeDetailSize = '';
+
+        function openProductDetail(id) {
+            const p = getProducts().find(item => item.id === id);
+            if (!p) return;
+            activeDetailProductId = id;
+            const photos = [p.image, ...(Array.isArray(p.gallery) ? p.gallery : [])].filter(Boolean);
+            document.getElementById('detailMainImage').src = photos[0] || '';
+            document.getElementById('detailMainImage').alt = p.title;
+            document.getElementById('detailTitle').textContent = p.title;
+            document.getElementById('detailCategory').textContent = p.category || '';
+            document.getElementById('detailSpecs').textContent = p.specs || '';
+            document.getElementById('detailPrice').textContent = p.price || '';
+            document.getElementById('detailDescription').textContent = p.description || 'Product details coming soon.';
+            document.getElementById('reviewProductId').value = p.id;
+            const thumbs = document.getElementById('detailThumbnails');
+            thumbs.innerHTML = '';
+            photos.forEach((photo, index) => {
+                const img = document.createElement('img');
+                img.src = photo; img.alt = `${p.title} photo ${index + 1}`;
+                img.className = `gallery-thumb${index === 0 ? ' active' : ''}`;
+                img.addEventListener('click', () => {
+                    document.getElementById('detailMainImage').src = photo;
+                    thumbs.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+                    img.classList.add('active');
+                });
+                thumbs.appendChild(img);
+            });
+            const sizeSelect = document.getElementById('detailSizeSelect');
+            const sizes = Array.isArray(p.sizes) && p.sizes.length ? p.sizes : ['One size'];
+            sizeSelect.innerHTML = sizes.map(size => `<option value="${safeText(size)}">${safeText(size)}</option>`).join('');
+            activeDetailSize = sizes[0];
+            sizeSelect.onchange = () => activeDetailSize = sizeSelect.value;
+            document.getElementById('detailAddButton').onclick = () => { closeProductDetail(); addToCart(id, activeDetailSize); };
+            renderProductReviews(p);
+            document.getElementById('productDetailModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeProductDetail() {
+            document.getElementById('productDetailModal').style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        function renderProductReviews(product) {
+            const target = document.getElementById('productReviews');
+            const reviews = Array.isArray(product.reviews) ? product.reviews.filter(r => r.approved === true && r.verified === true) : [];
+            if (!reviews.length) {
+                target.innerHTML = '<p class="review-note">No verified reviews have been published for this piece yet.</p>';
+                return;
+            }
+            target.innerHTML = reviews.map(r => `<article class="review-card"><div class="review-meta">${safeText(r.name)} · VERIFIED PURCHASE</div><div class="review-stars">${'★'.repeat(Math.max(1, Math.min(5, Number(r.rating) || 5)))}</div><p class="review-body">${safeText(r.text)}</p></article>`).join('');
+        }
+
+        async function submitReviewRequest(e) {
+            e.preventDefault();
+            const product = getProducts().find(p => p.id === document.getElementById('reviewProductId').value);
+            if (!product) return;
+            if (!FORMSPREE_ENDPOINT || FORMSPREE_ENDPOINT.includes('YOUR_FORM_ID')) {
+                alert('Review requests are not connected yet. Configure your Formspree endpoint.');
+                return;
+            }
+            const form = e.currentTarget;
+            const button = form.querySelector('button[type="submit"]');
+            button.disabled = true; button.textContent = 'Sending...';
+            const payload = {
+                _subject: `VESSAIRE review verification request: ${product.title}`,
+                request_type: 'Purchase verification and review moderation',
+                product_id: product.id, product: product.title,
+                customer_name: document.getElementById('reviewName').value.trim(),
+                order_reference: document.getElementById('reviewOrder').value.trim(),
+                order_email: document.getElementById('reviewEmail').value.trim(),
+                rating: document.getElementById('reviewRating').value,
+                review_text: document.getElementById('reviewText').value.trim()
+            };
+            try {
+                const response = await fetch(FORMSPREE_ENDPOINT, {method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify(payload)});
+                if (!response.ok) throw new Error('Review request was not accepted.');
+                alert('Your review was submitted for purchase verification. It will not appear publicly until VESSAIRE approves it.');
+                form.reset();
+            } catch (err) {
+                alert('We could not send your review request. Please try again later.');
+            } finally {
+                button.disabled = false; button.textContent = 'Send Review for Verification';
+            }
         }
 
         function toggleCategoryDrawer() {
@@ -805,11 +1259,11 @@
             document.getElementById('cartDrawer').classList.toggle('open');
         }
 
-        function addToCart(id) {
+        function addToCart(id, size = 'One size') {
             const products = getProducts();
             const product = products.find(p => p.id === id);
             if (product) {
-                cart.push(product);
+                cart.push({ ...product, selectedSize: size });
                 updateCartUI();
                 toggleCart();
             }
@@ -838,8 +1292,9 @@
                 container.innerHTML += `
                     <div class="cart-item">
                         <div>
-                            <strong style="font-weight:300; letter-spacing:0.08em;">${item.title}</strong><br>
-                            <span style="color:var(--text-muted); font-size:0.7rem;">${item.price}</span>
+                            <strong style="font-weight:300; letter-spacing:0.08em;">${safeText(item.title)}</strong><br>
+                            <span style="color:var(--text-muted); font-size:0.68rem;">Size: ${safeText(item.selectedSize || 'One size')}</span><br>
+                            <span style="color:var(--text-muted); font-size:0.7rem;">${safeText(item.price)}</span>
                         </div>
                         <button onclick="removeFromCart(${index})" style="background:none; border:none; color:#ff8888; cursor:pointer; font-size:0.65rem; letter-spacing:0.08em;">Remove</button>
                     </div>
@@ -880,7 +1335,7 @@
             const customerEmail = document.getElementById('custEmail').value.trim();
             const address = document.getElementById('custAddress').value.trim();
             const method = document.getElementById('payMethod').value;
-            const itemsSummary = cart.map(item => `${item.title} (${item.price})`).join(', ');
+            const itemsSummary = cart.map(item => `${item.title} - Size: ${item.selectedSize || 'One size'} (${item.price})`).join(', ');
             const total = cart.reduce((sum, item) => sum + (parseFloat(item.price.replace(/[^0-9.]/g, '')) || 0), 0);
 
             const orderDetails = {
@@ -966,6 +1421,11 @@
 
             const products = getProducts();
 
+            const reviewPicker = document.getElementById('reviewAdminProduct');
+            if (reviewPicker) {
+                reviewPicker.innerHTML = products.map(p => `<option value="${safeText(p.id)}">${safeText(p.title)}</option>`).join('');
+            }
+
             const invBody = document.getElementById('adminInventoryBody');
             invBody.innerHTML = '';
             products.forEach((p, index) => {
@@ -973,11 +1433,40 @@
                     <tr>
                         <td>${p.title}</td>
                         <td>${p.category}</td>
-                        <td>${p.price}</td>
-                        <td><button onclick="deleteProduct(${index})" style="background:#2a0a0a; color:#ff8888; border:none; padding:5px 10px; cursor:pointer; font-size:0.65rem;">Remove</button></td>
+                        <td>${safeText(p.price)}</td>
+                        <td><button class="admin-action" onclick="editProduct('${safeText(p.id)}')">Edit listing</button><button onclick="deleteProduct(${index})" style="background:#2a0a0a; color:#ff8888; border:none; padding:7px 10px; cursor:pointer; font-size:0.65rem;">Remove</button></td>
                     </tr>
                 `;
             });
+        }
+
+        function publishVerifiedReview() {
+            const productId = document.getElementById('reviewAdminProduct').value;
+            const name = document.getElementById('reviewAdminName').value.trim();
+            const reviewText = document.getElementById('reviewAdminText').value.trim();
+            if (!productId || !name || !reviewText) {
+                alert('Choose a product and enter the customer name and review.');
+                return;
+            }
+            const products = getProducts();
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            if (!Array.isArray(product.reviews)) product.reviews = [];
+            product.reviews.push({
+                id: Date.now().toString(),
+                name,
+                rating: Number(document.getElementById('reviewAdminRating').value),
+                text: reviewText,
+                verified: true,
+                approved: true,
+                publishedAt: new Date().toISOString()
+            });
+            localStorage.setItem('vessaire_products', JSON.stringify(products));
+            document.getElementById('reviewAdminName').value = '';
+            document.getElementById('reviewAdminText').value = '';
+            renderStore();
+            if (activeDetailProductId === productId) renderProductReviews(product);
+            alert('Verified review published on this browser.');
         }
 
         function saveSettings(e) {
@@ -993,20 +1482,51 @@
 
         function addProduct(e) {
             e.preventDefault();
-            const title = document.getElementById('newTitle').value;
-            const price = document.getElementById('newPrice').value;
-            const category = document.getElementById('newCategory').value;
-            const specs = document.getElementById('newSpecs').value;
-            const image = document.getElementById('newImage').value;
-
             const products = getProducts();
-            products.push({ id: Date.now().toString(), title, category, price, specs, image });
+            const id = document.getElementById('editingProductId').value || Date.now().toString();
+            const existing = products.find(p => p.id === id);
+            const gallery = document.getElementById('newGallery').value.split(/\r?\n/).map(v => v.trim()).filter(Boolean);
+            const sizes = document.getElementById('newSizes').value.split(',').map(v => v.trim()).filter(Boolean);
+            const product = {
+                id, title: document.getElementById('newTitle').value.trim(),
+                price: document.getElementById('newPrice').value.trim(),
+                category: document.getElementById('newCategory').value,
+                specs: document.getElementById('newSpecs').value.trim(),
+                image: document.getElementById('newImage').value.trim(),
+                gallery, description: document.getElementById('newDescription').value.trim(),
+                sizes: sizes.length ? sizes : ['One size'],
+                reviews: existing && Array.isArray(existing.reviews) ? existing.reviews : []
+            };
+            if (existing) products[products.findIndex(p => p.id === id)] = product;
+            else products.push(product);
             localStorage.setItem('vessaire_products', JSON.stringify(products));
+            resetProductEditor(); loadAdminData(); renderStore();
+            alert(existing ? 'Listing updated.' : 'Listing published.');
+        }
 
-            e.target.reset();
-            loadAdminData();
-            renderStore();
-            alert('Listing published successfully!');
+        function editProduct(id) {
+            const p = getProducts().find(item => item.id === id);
+            if (!p) return;
+            document.getElementById('editingProductId').value = p.id;
+            document.getElementById('newTitle').value = p.title || '';
+            document.getElementById('newPrice').value = p.price || '';
+            document.getElementById('newCategory').value = p.category || 'Chains';
+            document.getElementById('newSpecs').value = p.specs || '';
+            document.getElementById('newImage').value = p.image || '';
+            document.getElementById('newDescription').value = p.description || '';
+            document.getElementById('newGallery').value = (p.gallery || []).join('\\n');
+            document.getElementById('newSizes').value = (p.sizes || []).join(', ');
+            document.getElementById('publishProductButton').textContent = 'Save Listing Changes';
+            document.getElementById('cancelEditButton').style.display = 'inline-block';
+            document.getElementById('newTitle').scrollIntoView({behavior:'smooth',block:'center'});
+        }
+
+        function resetProductEditor() {
+            const form = document.querySelector('#adminDashboardPanel form[onsubmit="addProduct(event)"]');
+            if (form) form.reset();
+            document.getElementById('editingProductId').value = '';
+            document.getElementById('publishProductButton').textContent = 'Publish Listing';
+            document.getElementById('cancelEditButton').style.display = 'none';
         }
 
         function deleteProduct(index) {
@@ -1019,6 +1539,7 @@
             }
         }
 
+        window.addEventListener('keydown', e => { if (e.key === 'Escape') closeProductDetail(); });
         window.onload = renderStore;
     </script>
 </body>
