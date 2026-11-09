@@ -862,6 +862,34 @@
             .gallery-main { height: 58vh; min-height: 270px; }
         }
 
+    
+        /* Cart drawer: explicitly anchor to the right, overriding generic drawer positioning */
+        #cartDrawer {
+            left: auto !important;
+            right: -450px;
+            border-right: none;
+            border-left: 1px solid rgba(220, 211, 195, 0.17);
+            transition: right 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        #cartDrawer.open {
+            left: auto !important;
+            right: 0;
+        }
+
+        @media (max-width: 768px) {
+            #cartDrawer {
+                left: auto !important;
+                right: -100%;
+                width: 100%;
+                max-width: 100%;
+            }
+            #cartDrawer.open {
+                left: auto !important;
+                right: 0;
+            }
+        }
+
     </style>
 </head>
 <body>
